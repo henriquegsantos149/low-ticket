@@ -67,10 +67,26 @@ export default async function handler(req, res) {
         source: '940',
         medium: '941'
       }
+    },
+    portfoliomapas: {
+      tagId: '497', // [LOWTICKET][PORTFOLIODEMAPAS] Lead
+      fields: {
+        content: '942',
+        term: '943',
+        subscribeDate: '944',
+        education: '945',
+        educationArea: '946',
+        campaign: '947',
+        source: '948',
+        medium: '949'
+      }
     }
   };
 
-  const productConfig = PRODUCT_MAPPINGS[slug] || PRODUCT_MAPPINGS.manualrac;
+  const productConfig = PRODUCT_MAPPINGS[slug];
+  if (!productConfig) {
+    return res.status(400).json({ message: 'Produto não configurado para cadastro' });
+  }
 
   // Sanitização de telefone: DDD + número (10 ou 11 dígitos, sem DDI 55)
   const rawPhone = (phone || telefone || whatsapp || '').toString().trim();
