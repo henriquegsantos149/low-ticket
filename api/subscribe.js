@@ -32,7 +32,12 @@ export default async function handler(req, res) {
     return res.status(400).json({ message: 'Email é obrigatório' });
   }
 
-  const API_KEY = process.env.ACTIVE_API_KEY || process.env.API_KEY_ACTIVE || '9617e0716b9a89bc87a2d382d9aeedc19df5bb57f5fd0af5278e9d788fe96c711fa0ebe6';
+  const API_KEY = process.env.ACTIVE_API_KEY || process.env.API_KEY_ACTIVE;
+  if (!API_KEY) {
+    console.error('[API Subscribe Error] ACTIVE_API_KEY não configurada nas variáveis de ambiente.');
+    return res.status(500).json({ message: 'Erro de configuração no servidor: ACTIVE_API_KEY ausente.' });
+  }
+
   const API_URL = 'https://ambientalpro.api-us1.com/api/3';
 
   // Configuração por produto com IDs de tags e campos customizados no ActiveCampaign

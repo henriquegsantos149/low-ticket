@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import { fileURLToPath } from 'node:url';
 
 const pageSlugs = ['manualrac', 'manualnovalei', 'portfoliomapas'];
@@ -73,21 +73,26 @@ function cleanPageUrls() {
   };
 }
 
-export default defineConfig({
-  base: '/',
-  plugins: [cleanPageUrls()],
-  server: {
-    port: 3000,
-    open: true
-  },
-  build: {
-    rollupOptions: {
-      input: {
-        main: fileURLToPath(new URL('./index.html', import.meta.url)),
-        portfoliomapas: fileURLToPath(new URL('./portfoliomapas.html', import.meta.url)),
-        manualrac: fileURLToPath(new URL('./manualrac.html', import.meta.url)),
-        manualnovalei: fileURLToPath(new URL('./manualnovalei.html', import.meta.url))
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  Object.assign(process.env, env);
+
+  return {
+    base: '/',
+    plugins: [cleanPageUrls()],
+    server: {
+      port: 3000,
+      open: true
+    },
+    build: {
+      rollupOptions: {
+        input: {
+          main: fileURLToPath(new URL('./index.html', import.meta.url)),
+          portfoliomapas: fileURLToPath(new URL('./portfoliomapas.html', import.meta.url)),
+          manualrac: fileURLToPath(new URL('./manualrac.html', import.meta.url)),
+          manualnovalei: fileURLToPath(new URL('./manualnovalei.html', import.meta.url))
+        }
       }
     }
-  }
+  };
 });
