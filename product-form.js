@@ -72,7 +72,7 @@ dialog.innerHTML = `
     <label>Nome completo<input name="nome" autocomplete="name" required maxlength="150" placeholder="Seu nome"></label>
     <div class="form-row">
       <label>E-mail<input type="email" name="email" autocomplete="email" required maxlength="254" placeholder="Seu e-mail"></label>
-      <label>WhatsApp com DDD<input type="tel" name="telefone" autocomplete="tel-national" inputmode="tel" required placeholder="(11) 99999-9999"></label>
+      <label>WhatsApp com DDD<input type="tel" name="telefone" autocomplete="tel-national" inputmode="tel" required maxlength="15" placeholder="(11) 99999-9999"></label>
     </div>
     <label>Possui graduação completa?<select name="formacao" required><option value="">Selecione</option><option>Sim</option><option>Não</option></select></label>
     <label class="education-area" hidden>Qual é a sua área de formação?<input name="area" maxlength="150" placeholder="Sua profissão ou curso" disabled></label>
@@ -85,6 +85,16 @@ document.body.append(dialog);
 const form = dialog.querySelector('form');
 const phone = form.elements.telefone;
 const educationArea = form.querySelector('.education-area');
+
+// Formatação visual do telefone (máscara dinâmica com limite de 11 dígitos)
+function formatPhone(value) {
+  const digits = (value || '').replace(/\D/g, '').slice(0, 11);
+  if (!digits) return '';
+  if (digits.length <= 2) return `(${digits}`;
+  if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+  if (digits.length <= 10) return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+}
 
 form.elements.formacao.addEventListener('change', () => {
   const graduated = form.elements.formacao.value === 'Sim';
@@ -106,8 +116,12 @@ dialog.addEventListener('click', event => {
 });
 
 phone.addEventListener('input', () => {
-  phone.value = phone.value.replace(/[^\d()+\s-]/g, '').slice(0, 20);
+  phone.value = formatPhone(phone.value);
   phone.setCustomValidity('');
+});
+
+phone.addEventListener('blur', () => {
+  phone.value = formatPhone(phone.value);
 });
 
 document.querySelectorAll('a.btn[href="#oferta"], #purchase').forEach(button => {
