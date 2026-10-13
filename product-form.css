@@ -1,0 +1,16 @@
+.product-dialog{color-scheme:dark;width:min(580px,calc(100% - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:36px;border:1px solid var(--line);border-radius:16px;background:var(--bg);color:var(--text);box-shadow:0 30px 100px #0008;font-family:Arial,Helvetica,sans-serif}
+.product-dialog::backdrop{background:#000c;backdrop-filter:blur(6px)}
+.product-dialog h2{font-size:27px;line-height:1.2;padding-right:20px;margin:0 0 12px}
+.product-dialog .form-intro{font-size:14px;color:var(--muted);margin-bottom:24px}
+.form-close{position:absolute;top:12px;right:14px;border:0;background:transparent;color:var(--muted);font-size:28px;cursor:pointer}
+.product-lead-form{display:grid;gap:16px}
+.product-lead-form label{display:grid;gap:7px;font-size:12px;font-weight:700;color:var(--green)}
+.product-lead-form input,.product-lead-form select{width:100%;min-width:0;min-height:44px;padding:11px 12px;background:var(--panel);border:1px solid var(--line);border-radius:7px;color:var(--text);font:14px Arial}
+.product-lead-form input:focus,.product-lead-form select:focus{outline:2px solid var(--green);outline-offset:2px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.product-dialog .form-consent{font-size:11px;color:var(--muted);margin:0;line-height:1.6}
+.product-dialog .form-feedback{font-size:13px;margin:0;color:var(--text)}
+.product-dialog .form-submit{width:100%}
+@media(max-width:600px){.product-dialog{padding:28px 22px}.form-row{grid-template-columns:1fr}.product-dialog h2{font-size:24px}}
+
+.product-lead-form label[hidden]{display:none}

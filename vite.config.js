@@ -8,7 +8,38 @@ function cleanPageUrls() {
     name: 'clean-page-urls',
     enforce: 'post',
     configureServer(server) {
-      server.middlewares.use((req, res, next) => {
+      server.middlewares.use(async (req, res, next) => {
+        if (req.url && req.url.startsWith('/api/subscribe') && req.method === 'POST') {
+          let bodyStr = '';
+          req.on('data', chunk => { bodyStr += chunk; });
+          req.on('end', async () => {
+            try {
+              const body = bodyStr ? JSON.parse(bodyStr) : {};
+              const { default: subscribeHandler } = await import('./api/subscribe.js');
+              const customRes = {
+                statusCode: 200,
+                status(code) { this.statusCode = code; return this; },
+                json(data) {
+                  res.statusCode = this.statusCode;
+                  res.setHeader('Content-Type', 'application/json');
+                  res.end(JSON.stringify(data));
+                },
+                send(data) {
+                  res.statusCode = this.statusCode;
+                  res.end(data);
+                }
+              };
+              await subscribeHandler({ ...req, body }, customRes);
+            } catch (err) {
+              console.error('[API Subscribe Middleware Error]:', err);
+              res.statusCode = 500;
+              res.setHeader('Content-Type', 'application/json');
+              res.end(JSON.stringify({ error: err.message }));
+            }
+          });
+          return;
+        }
+
         const url = new URL(req.url, 'http://localhost');
         const slug = url.pathname.replace(/^\//, '').replace(/\/$/, '');
         if (url.pathname === '/index.html' || pageSlugs.some(page => url.pathname === `/${page}.html`)) {
