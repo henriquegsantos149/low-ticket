@@ -11,8 +11,12 @@ const productName = products[slug] || 'Manual Prático de Remediação de Áreas
 // Endpoint da planilha Google Sheets (backup/destino complementar de cadastros)
 const endpoint = 'https://script.google.com/macros/s/AKfycbzoQQtPl_TazLAIbacOSLYyq_fCulFa10Dv_Wd1DOR96Xsurd9_HeSKgsv9axxm9l4PTg/exec';
 
-// Configure o destino individual quando o checkout estiver disponível.
-const checkoutUrls = { manualrac: '', manualnovalei: '', portfoliomapas: '' };
+// Checkout correspondente a cada produto após o envio do formulário.
+const checkoutUrls = {
+  manualrac: 'https://pay.voompcreators.com.br/uDAgJWa68i6pHG7O',
+  manualnovalei: 'https://pay.voompcreators.com.br/tuSuOtvaE8wL9lWO',
+  portfoliomapas: 'https://pay.voompcreators.com.br/dRmd5sf0091rJi5l'
+};
 
 // Helper para capturar e persistir UTMs da URL
 function getUtms() {
@@ -67,7 +71,7 @@ dialog.setAttribute('aria-labelledby', 'product-form-title');
 dialog.innerHTML = `
   <button class="form-close" type="button" aria-label="Fechar formulário">×</button>
   <h2 id="product-form-title">Preencha suas informações</h2>
-  <p class="form-intro">Cadastre seu interesse em <strong>${productName}</strong>. As vendas ainda não estão disponíveis.</p>
+  <p class="form-intro">Preencha seus dados para continuar para o pagamento de <strong>${productName}</strong>.</p>
   <form class="product-lead-form">
     <label>Nome completo<input name="nome" autocomplete="name" required maxlength="150" placeholder="Seu nome"></label>
     <div class="form-row">
@@ -78,7 +82,7 @@ dialog.innerHTML = `
     <label class="education-area" hidden>Qual é a sua área de formação?<input name="area" maxlength="150" placeholder="Sua profissão ou curso" disabled></label>
     <p class="form-consent">Ao enviar, você autoriza a Ambiental Pro a entrar em contato sobre este produto.</p>
     <p class="form-feedback" role="status" aria-live="polite"></p>
-    <button class="btn form-submit" type="submit">CADASTRAR INTERESSE →</button>
+    <button class="btn form-submit" type="submit">CONTINUAR PARA O PAGAMENTO →</button>
   </form>`;
 document.body.append(dialog);
 
