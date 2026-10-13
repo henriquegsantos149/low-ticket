@@ -758,3 +758,15 @@ body::before {
 .card-media-manual .media-coord {
   background: var(--bg-primary);
 }
+
+.card-media-maps { background: radial-gradient(ellipse at center, #19311b, #010404 85%); }
+.card-map-stack { position: absolute; width: 66%; height: 92%; left: 17%; top: 4%; }
+.card-media-maps .card-map-stack img { position: absolute; width: 78%; height: auto; object-fit: contain; border: 2px solid #fff; box-shadow: 0 8px 18px #0009; filter: brightness(.85); }
+.card-map-back { left: 0; top: 35%; z-index: 1; transform: rotate(-5deg); }
+.card-map-middle { left: 10%; top: 18%; z-index: 2; transform: rotate(2deg); }
+.card-map-front { right: 0; top: 0; z-index: 3; transform: rotate(-2deg); }
+.showcase-card:hover .card-map-back { transform: rotate(-5deg); }
+.showcase-card:hover .card-map-middle { transform: rotate(2deg); }
+.showcase-card:hover .card-map-front { transform: rotate(-2deg); }
+.card-media-maps .card-media-overlay { z-index: 4; background: linear-gradient(180deg, transparent 65%, #01040488); }
+.card-media-maps .media-coord { z-index: 5; }
