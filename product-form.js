@@ -8,9 +8,6 @@ const products = {
 const slug = document.body.dataset.product || 'manualrac';
 const productName = products[slug] || 'Manual Prático de Remediação de Áreas Contaminadas';
 
-// Endpoint da planilha Google Sheets (backup/destino complementar de cadastros)
-const endpoint = 'https://script.google.com/macros/s/AKfycbzoQQtPl_TazLAIbacOSLYyq_fCulFa10Dv_Wd1DOR96Xsurd9_HeSKgsv9axxm9l4PTg/exec';
-
 // Checkout correspondente a cada produto após o envio do formulário.
 const checkoutUrls = {
   manualrac: 'https://pay.voompcreators.com.br/uDAgJWa68i6pHG7O',
@@ -193,35 +190,16 @@ form.addEventListener('submit', async event => {
   feedback.textContent = '';
 
   try {
-    // 1. Envio para a API ActiveCampaign (/api/subscribe) com tags e UTMs
-    const subscribePromise = fetch('/api/subscribe', {
+    // Envio para o ActiveCampaign com tags e UTMs.
+    const response = await fetch('/api/subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
-    }).then(async res => {
-      if (!res.ok) {
-        const errorText = await res.text();
-        console.warn('[API Subscribe]', res.status, errorText);
-      }
-      return res;
-    }).catch(err => {
-      console.warn('[API Subscribe Error]:', err);
-      return null;
     });
-
-    // 2. Envio paralelo para o endpoint da planilha Google Sheets
-    const sheetPromise = fetch(endpoint, {
-      method: 'POST',
-      mode: 'no-cors',
-      keepalive: true,
-      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-      body: JSON.stringify(payload)
-    }).catch(err => {
-      console.warn('[Google Sheets Error]:', err);
-      return null;
-    });
-
-    await Promise.allSettled([subscribePromise, sheetPromise]);
+    const result = response.ok ? await response.json() : null;
+    if (!response.ok || result?.success !== true) {
+      throw new Error('Falha ao registrar cadastro no ActiveCampaign');
+    }
 
     if (checkoutUrls[slug]) {
       const checkoutUrlObj = new URL(checkoutUrls[slug], window.location.href);
